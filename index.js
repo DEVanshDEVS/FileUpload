@@ -1,7 +1,7 @@
 const express = require("express");
 const connect = require("mongoose");
 const app = express();
-const fileupload = require("express-fileupload");
+const fileUpload = require("express-fileupload");
 
 require("dotenv").config();
 const PORT = process.env.PORT || 4000;
@@ -11,7 +11,7 @@ app.use(express.json());
 //we have other middleware like multer as well
 app.use(fileUpload());
 
-//connect with DB
+//connect with DB 
 const db = require("./config/database");
 db.connect();
 
@@ -21,7 +21,7 @@ cloudinary.cloudinaryConnect();
 
 //mount routes
 const Upload = require("./routes/fileUpload");
-app.use("/api/v1", Upload);
+app.use("/api/v1/upload", Upload);
 
 //start server
 app.listen(PORT, ()=>{
