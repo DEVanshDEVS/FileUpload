@@ -9,7 +9,10 @@ const PORT = process.env.PORT || 4000;
 app.use(express.json());
 //middleware to interact with files like images and videos(npm i express-fileupload)
 //we have other middleware like multer as well
-app.use(fileUpload());
+app.use(fileUpload({
+    useTempFiles:true,
+    tempFileDir:'/tmp/',
+}));
 
 //connect with DB 
 const db = require("./config/database");
