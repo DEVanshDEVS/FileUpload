@@ -55,12 +55,15 @@ function isFileTypeSupported(type, supportedTypes){
 //Function to upload to cloudinary
 async function uploadFileToCloudinary(file, folder) {
   const options = {folder};
+  console.log("temp file path: ", file.tempFilePath);
+  options.resource_type = "auto";//detect file type automatically
   return await cloudinary.uploader.upload(file.tempFilePath, options);
 }
 
 //image upload handler
 exports.imageUpload = async (req, res)=>{
   try{
+    //data fetch
     const {name, tags, email} = req.body
     console.log(name, tags, email);
 
@@ -86,13 +89,13 @@ exports.imageUpload = async (req, res)=>{
       tags,
       email,
       imageUrl:response.secure_url,
-    })
+    });
 
     res.json({
       success:true,
       imageUrl:response.secure_url,
       message:'Image Successfully Uploaded',
-    })
+    });
       
   } catch(error){
     console.error(error);
@@ -101,4 +104,60 @@ exports.imageUpload = async (req, res)=>{
       message:'Something went wrong',
     });
   }
-}
+};
+
+
+
+//video upload handler(Almost same)
+exports.videoUpload = async (req,res) =>{
+  try{
+    //data fetch
+    const {name, tags, email} = req.body;
+    console.log(name, tags, email);
+    const videoFile = req.files.videoFile;
+
+    //validation
+    const supportedTypes = ["mp4", "mov"]; 
+    const fileType = videoFile.name.split('.')[1].toLowerCase();
+    if(!isFileTypeSupported(fileType, supportedTypes)){
+      return res.status(400).json({
+        success:false,
+        message:'File format not supported',
+      });
+    }
+
+    //TODO: add an upper limit of 5MB
+    const maxSize = 5 * 1024 * 1024;
+    if (videoFile.size > maxSize) {
+      return res.status(400).json({
+        success: false,
+        message: "File size exceeds 5MB limit",
+      });
+    }
+    //file format supported, upload to CLOUDINARY
+    const response = await uploadFileToCloudinary(videoFile, "Folder1");
+    console.log(response);
+
+    //db entry
+    const fileData = await File.create({
+      name,
+      tags,
+      email,
+      videoUrl:response.secure_url,
+    });
+
+    //send response
+    res.json({
+      success:true,
+      videoUrl:response.secure_url,
+      message:'Video Successfully Uploaded',
+    });
+
+  } catch(error){
+    console.error(error);
+    res.status(400).json({
+      success:false,
+      message:'Something went wrong',
+    });
+  }
+};
