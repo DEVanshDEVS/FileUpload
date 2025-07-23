@@ -41,9 +41,6 @@ A simple **Node.js** and **Express** backend project to upload **images**, **vid
 ├── .env
 └── server.js
 
-yaml
-Copy code
-
 ---
 
 ## ⚙️ Environment Variables (`.env`)
@@ -58,8 +55,6 @@ MAIL_HOST=smtp.gmail.com
 MAIL_USER=youremail@gmail.com
 MAIL_PASS=your_app_password
 
-yaml
-Copy code
 
 ---
 
@@ -80,7 +75,6 @@ Each time a file is successfully uploaded to **Cloudinary**, an **email is autom
 
 ## 📸 Sample Cloudinary Upload Response
 
-```json
 {
   "name": "Test",
   "imageUrl": "IMAGE_URL",
