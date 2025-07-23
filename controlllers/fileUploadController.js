@@ -221,4 +221,4 @@ exports.imageSizeReducer = async (req,res) => {
       message:'Something went wrong',
     });
   }
-};  
+};
